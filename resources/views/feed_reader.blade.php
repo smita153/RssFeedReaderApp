@@ -27,7 +27,7 @@
                 <div class="col-sm-6" align="center">
                     <br/>
 
-                    <button type="button" name="create_record" id="create_record" class="btn btn-success btn-sm">Update RSS</button>
+                   <a href="{{url('/feed_reader/store')}}" > <button type="button" name="create_record" id="create_record" class="btn btn-success btn-sm">Update RSS</button></a>
                 </div>
             </div>
         </div>
@@ -43,14 +43,14 @@
                     <th style="width: 10%">Action</th>
                 </tr>
                 </thead>
-             @foreach($RssFeeds  as $feed)
-        
-        <tr>
+         @foreach($RssFeeds as $feed)
+         <tr>
+       
         <td>{{$feed->title}}</td>
         <td>{{$feed->description}}</td>
-        <td><a href="#">{{$feed->guid}}</a></td> 
+        <td ><a  id='guid' >{{$feed->guid}}</a></td> 
         <td>{{$feed->date}}</td> 
-        <td id='action'><a href="{{$feed->guid}}" target="_blank"><button>Article</button></a></td>    
+        <td id="action['{{$feed->guid}}']"><div class="actionbtn" style="display:none;"><a href="{{$feed->guid}}" target="_blank"><button class="btn btn-success btn-sm" >View</button></a></div></td>    
         </tr>
         @endforeach
             </table>
@@ -63,54 +63,34 @@
 </div>
 </body>
 </html>
+<script>
+     // Create Dynamic Button   
+     function createButton(context){
+        var button = document.createElement("input");
+        button.type = "button";
+        button.value = "Follow Rss";
+        //context.appendChild(button);
+    }
 
-<div id="formModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Add New Record</h4>
-            </div>
-            <div class="modal-body">
-                <span id="form_result"></span>
-                <form method="post" id="feed_reader_form" class="form-horizontal">
-                    @csrf
-                    <div class="form-group">
-                        <label class="control-label col-md-4" >URL : </label>
-                        <div class="col-md-8">
-                            <input type="text" name="url" id="url" class="form-control" value="http://feeds.bbci.co.uk/news/uk/rss.xml" />
-                        </div>
-                    </div>
-                  
-                   
-                    <br />
-                    <div class="form-group" align="center">
-                        <input type="hidden" name="action" id="action" value="Add" />
-                        <input type="hidden" name="hidden_id" id="hidden_id" />
-                        <input type="submit" name="action_button" id="action_button" class="btn btn-warning" value="Update" />
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="confirmModal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h2 class="modal-title">Confirmation</h2>
-            </div>
-            <div class="modal-body">
-                <h4 align="center" style="margin:0;">Are you sure you want to remove this data?</h4>
-            </div>
-            <div class="modal-footer">
-                <button type="button" name="ok_button" id="ok_button" class="btn btn-danger">OK</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
+    $(document).ready(function(){    
+        
+        
+    // Alt Key event 
+    document.onkeydown = keydown;
+    function keydown(evt) {
+        if (!evt) evt = event;
+        if (evt.altKey) {
+            document.getElementById("guid").addEventListener("click", urlClicked);
+            function urlClicked() {
+                var y = document.getElementsByClassName('actionbtn');
+             y[0].style.display = 'block';
+            }
+           
+        }else{
+            var y = document.getElementsByClassName('actionbtn');
+             y[0].style.display = 'none';
+        }
+    } 
+  
+    });
+</script>

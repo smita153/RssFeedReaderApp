@@ -10,14 +10,12 @@ class RssFeedReaderController extends Controller
     public function index()
     {
        
-            $RssFeeds = RssFeedReader::latest()->get();
-             // dd($RssFeeds);
-              foreach($RssFeeds as $feed) {
+            $data = RssFeedReader::latest()->get();
+             
+              foreach($data as $feed) {
                 $RssFeeds[] = json_decode($feed->publish);
-              }
-              
-        
-                
+              }   
+                 
         return view('feed_reader', ['RssFeeds' =>$RssFeeds]);
     } 
     public function store(Request $request){
