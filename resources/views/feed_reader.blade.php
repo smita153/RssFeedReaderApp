@@ -12,7 +12,62 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css" />
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <style type="text/css">
+            /* Popup container - can be anything you want */
+.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 
+/* The actual popup */
+.popup .popuptext {
+  visibility: hidden;
+  width: 160px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class - hide and show the popup */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;} 
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+}
     </style>
 </head>
 <body>
@@ -48,9 +103,9 @@
        
         <td>{{$feed->title}}</td>
         <td>{{$feed->description}}</td>
-        <td ><a  id='guid' >{{$feed->guid}}</a></td> 
+        <td ><a  id='guid' class="popup" onclick="viewFunction({{$feed->guid}})" >{{$feed->guid}}</a></td> 
         <td>{{$feed->date}}</td> 
-        <td id="action['{{$feed->guid}}']"><div class="actionbtn" style="display:none;"><a href="{{$feed->guid}}" target="_blank"><button class="btn btn-success btn-sm" >View</button></a></div></td>    
+        <td id="action['{{$feed->guid}}']"><div class="actionbtn" ><a href="{{$feed->guid}}" target="_blank"><button class="btn btn-success btn-sm" >View</button></a></div></td>    
         </tr>
         @endforeach
             </table>
@@ -63,34 +118,47 @@
 </div>
 </body>
 </html>
+// Create Dynamic Button  
+<div id="confirmModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" name="ok_button" id="ok_button" class="btn ">View Feed</button>
+              </div>
+        </div>
+    </div>
+</div>
 <script>
-     // Create Dynamic Button   
-     function createButton(context){
-        var button = document.createElement("input");
-        button.type = "button";
-        button.value = "Follow Rss";
-        //context.appendChild(button);
-    }
-
+   
     $(document).ready(function(){    
+        function viewFunction(id){  
         
-        
-    // Alt Key event 
-    document.onkeydown = keydown;
-    function keydown(evt) {
-        if (!evt) evt = event;
-        if (evt.altKey) {
-            document.getElementById("guid").addEventListener("click", urlClicked);
-            function urlClicked() {
-                var y = document.getElementsByClassName('actionbtn');
-             y[0].style.display = 'block';
+        // Alt Key event 
+                document.onkeydown = keydown;
+                function keydown(evt) {
+                    if (!evt) evt = event;
+                    if (evt.altKey) {
+                        document.getElementById("guid").addEventListener("click", urlClicked);
+                        function urlClicked() {
+                            var act = document.getElementsByClassName('actionbtn');
+                            act[0].style.display = 'block';
+                        }
+                    
+                    }else{
+                        var act = document.getElementsByClassName('actionbtn');
+                            act[0].style.display = 'none';
+                    }
+                } 
             }
-           
-        }else{
-            var y = document.getElementsByClassName('actionbtn');
-             y[0].style.display = 'none';
-        }
-    } 
+            var feed_id;
+
+$(document).on('click', '.popup', function(){
   
+    $('#confirmModal').modal('show');
+});
+
+$('#ok_button').click(function(){
+    // redirect to url
+});
     });
 </script>
