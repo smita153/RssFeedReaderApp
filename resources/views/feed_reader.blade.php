@@ -92,27 +92,23 @@
                 <tr>
                     
                     <th style="width: 20%">Title</th>
-                    <th style="width: 15%">Description</th>
+                    <th style="width: 25%">Description</th>
                     <th style="width: 15%">Link</th>
                     <th style="width: 15%">Post Date</th>
-                    <th style="width: 10%">Action</th>
+                    
                 </tr>
                 </thead>
          @foreach($RssFeeds as $feed)
-         <tr>
-       
-        <td>{{$feed->title}}</td>
-        <td>{{$feed->description}}</td>
-        <td ><a  id='guid' class="popup" onclick="viewFunction({{$feed->guid}})" >{{$feed->guid}}</a></td> 
-        <td>{{$feed->date}}</td> 
-        <td id="action['{{$feed->guid}}']"><div class="actionbtn" ><a href="{{$feed->guid}}" target="_blank"><button class="btn btn-success btn-sm" >View</button></a></div></td>    
-        </tr>
-        @endforeach
+         <tr>    
+            <td>{{$feed->title}}</td>
+            <td>{{$feed->description}}</td>
+            <td ><a  id='guid' class="popup" data-loadurl='{{$feed->guid}}' >{{$feed->guid}}</a></td> 
+            <td>{{$feed->date}}</td> 
+         </tr>
+         @endforeach
             </table>
         </div>
         <div>
-       
-
         </div>
     </div>
 </div>
@@ -122,7 +118,7 @@
 <div id="confirmModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-body">
+            <div class="modal-body" align='Center'>
                 <button type="button" name="ok_button" id="ok_button" class="btn ">View Feed</button>
               </div>
         </div>
@@ -130,35 +126,15 @@
 </div>
 <script>
    
+   // Redirect to Feed
     $(document).ready(function(){    
-        function viewFunction(id){  
-        
-        // Alt Key event 
-                document.onkeydown = keydown;
-                function keydown(evt) {
-                    if (!evt) evt = event;
-                    if (evt.altKey) {
-                        document.getElementById("guid").addEventListener("click", urlClicked);
-                        function urlClicked() {
-                            var act = document.getElementsByClassName('actionbtn');
-                            act[0].style.display = 'block';
-                        }
-                    
-                    }else{
-                        var act = document.getElementsByClassName('actionbtn');
-                            act[0].style.display = 'none';
-                    }
-                } 
-            }
-            var feed_id;
-
-$(document).on('click', '.popup', function(){
-  
-    $('#confirmModal').modal('show');
-});
-
-$('#ok_button').click(function(){
-    // redirect to url
-});
+        $(document).on('click', '.popup', function(){
+            var loadURL= $(this).data('loadurl');
+            var keys = {};
+            if (event.altKey) {  $('#confirmModal').modal('show'); } 
+            $('#ok_button').click(function(){
+                 window.location.href =loadURL;
+            });
+        });  
     });
 </script>
