@@ -7,11 +7,10 @@ use App\Models\RssFeedReader;
 use DB;
 class RssFeedReaderController extends Controller
 {
+    // Display Feeds
     public function index()
     {
-       
             $data = RssFeedReader::latest()->get();
-             
               foreach($data as $feed) {
                 $RssFeeds[] = json_decode($feed->publish);
               }   
@@ -20,7 +19,7 @@ class RssFeedReaderController extends Controller
     } 
     public function store(Request $request){
       
-        // Truncate Previous Recaird As Right now we are just considering on URL
+        // Truncate Previous Records - okay for single site data 
         DB::table('rss_feed_readers')->truncate();
         
         // Read URL
@@ -39,5 +38,5 @@ class RssFeedReaderController extends Controller
         
         return redirect('/feed_reader');
              
-         }
+    }
 }

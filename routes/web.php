@@ -14,8 +14,10 @@ use App\Http\Controllers\RssFeedReaderController;
 */
 
 Route::get('/', function () {
-    return view('feed_reader');
+    return view('welcome');
 });
 
+
+///Feed Reader
 Route::get('feed_reader',[RssFeedReaderController::class,'index']);
 Route::get('feed_reader/store',[RssFeedReaderController::class,'store'])->name('feed_reader.store');
